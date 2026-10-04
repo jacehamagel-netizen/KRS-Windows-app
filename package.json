@@ -1,0 +1,52 @@
+{
+  "name": "krs-portal",
+  "version": "1.2.0",
+  "description": "Kilifi Rising Star Academy Portal",
+  "author": "Kilifi Rising Star Academy",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win nsis portable",
+    "release": "electron-builder --win nsis portable --publish always"
+  },
+  "build": {
+    "appId": "com.krsa.portal",
+    "productName": "KRS Portal",
+    "files": [
+      "main.js",
+      "offline.html",
+      "splash.html",
+      "logo.png",
+      "icon.ico"
+    ],
+    "win": {
+      "icon": "icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "KRS Portal",
+      "runAfterFinish": true
+    },
+    "artifactName": "KRS-Portal-${version}-${target}.${ext}",
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ]
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  }
+}
