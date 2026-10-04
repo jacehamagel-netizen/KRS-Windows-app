@@ -33,14 +33,17 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "KRS Portal",
-      "runAfterFinish": true
+      "runAfterFinish": true,
+      "artifactName": "KRS-Portal-Setup-${version}.${ext}"
     },
-    "artifactName": "KRS-Portal-${version}-${target}.${ext}",
     "publish": [
       {
         "provider": "github"
       }
-    ]
+    ],
+    "portable": {
+      "artifactName": "KRS-Portal-Portable-${version}.${ext}"
+    }
   },
   "devDependencies": {
     "electron": "^33.2.0",
