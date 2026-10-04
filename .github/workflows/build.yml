@@ -1,0 +1,33 @@
+name: Build Windows app
+on:
+  workflow_dispatch:        # manual: builds files you can download from the run page
+  push:
+    tags: ['v*']            # tag like v1.2.0: builds AND publishes a release so installed apps auto-update
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install
+      # Code signing runs automatically when these two repo secrets exist; otherwise the build is unsigned.
+      - name: Build (manual run)
+        if: github.ref_type != 'tag'
+        run: npx electron-builder --win nsis portable --publish never
+        env:
+          CSC_LINK: ${{ secrets.WIN_CERT_PFX_BASE64 }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASSWORD }}
+      - name: Build and publish release (tag)
+        if: github.ref_type == 'tag'
+        run: npx electron-builder --win nsis portable --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.WIN_CERT_PFX_BASE64 }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KRS-Portal-Windows
+          path: dist/*.exe
